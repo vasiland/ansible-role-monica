@@ -1,1 +1,4 @@
-
+nginx_server_name: monica.local
+DB_DATABASE: monicadb
+DB_USERNAME: monica_dbuser
+DB_PASSWORD: similarly-secure-password

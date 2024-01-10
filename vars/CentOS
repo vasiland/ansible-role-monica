@@ -1,0 +1,6 @@
+group_name: apache
+nginx_conf: /etc/nginx/conf.d/monica.conf
+service_fpm: php-fpm
+fastcgi_p:  "127.0.0.1:9000"
+pass_mysql_root: Simulate_Pass1
+

@@ -1,36 +1,29 @@
+---
 language: python
-services: docker
+python: "2.7"
 
-env:
-  global:
-    - ROLE_NAME: monica
-  matrix:
-    # - MOLECULE_DISTRIBUTION: centos6
-    - MOLECULE_DISTRIBUTION: centos7
-    # - MOLECULE_DISTRIBUTION: rhel6
-    # - MOLECULE_DISTRIBUTION: rhel7
-    # - MOLECULE_DISTRIBUTION: rhel8
-    # - MOLECULE_DISTRIBUTION: ubuntu14
-    # - MOLECULE_DISTRIBUTION: ubuntu16
-    # - MOLECULE_DISTRIBUTION: ubuntu18
-    # - MOLECULE_DISTRIBUTION: debian8
-    # - MOLECULE_DISTRIBUTION: debian9
-    # - MOLECULE_DISTRIBUTION: debian10
-    # - MOLECULE_DISTRIBUTION: fedora29
-    # - MOLECULE_DISTRIBUTION: fedora30
+# Use the new container infrastructure
+sudo: false
+
+# Install ansible
+addons:
+  apt:
+    packages:
+    - python-pip
 
 install:
-  - pip install molecule docker
+  # Install ansible
+  - pip install ansible
 
-before_script:
-  # Remove "ansible-role-" prefix from role name
-  - cd ../
-  - mv ansible-role-${ROLE_NAME/_/-} $ROLE_NAME
-  - cd $ROLE_NAME
+  # Check ansible version
+  - ansible --version
+
+  # Create ansible.cfg with correct roles_path
+  - printf '[defaults]\nroles_path=../' >ansible.cfg
 
 script:
-  # Run tests
-  - molecule test --all
+  # Basic role syntax check
+  - ansible-playbook tests/test.yml -i tests/inventory --syntax-check
 
 notifications:
-  webhooks: https://galaxy.ansible.com/api/v1/notifications/
+  webhooks: https://galaxy.ansible.com/api/v1/notifications/

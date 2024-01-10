@@ -1,0 +1,19 @@
+---
+- name: Converge
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: "Include ansible-role-monica"
+      ansible.builtin.include_role:
+        name: "ansible-role-monica"
+      vars:
+        ansible_distribution: "CentOS"
+        group_name: apache
+        nginx_conf: /etc/nginx/conf.d/monica.conf
+        service_fpm: php-fpm
+        fastcgi_p:  "127.0.0.1:9000"
+
+        # ansible_distribution: "Ubuntu"
+        # group_name: www-data
+        # nginx_conf: /etc/nginx/sites-enabled/monica.conf
+        # service_fpm: php8.2-fpm

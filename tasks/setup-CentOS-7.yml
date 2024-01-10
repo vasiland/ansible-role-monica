@@ -1,0 +1,74 @@
+- name: RPM Install
+  shell: |
+     rpm -ivh https://dev.mysql.com/get/mysql80-community-release-el7-1.noarch.rpm
+     rpm --import https://repo.mysql.com/RPM-GPG-KEY-mysql-2022
+ 
+- name: Install repository CentOS 7
+  yum:
+    name: "{{ item }}"
+    state: present
+  loop:
+     - https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+     - http://rpms.remirepo.net/enterprise/remi-release-7.rpm
+     
+
+     
+- name: enable remi-php82
+  shell: yum-config-manager --enable remi-php82
+
+- name: install packages distribution CentOS ver 7
+  yum:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+  loop:
+    - git
+    - nginx
+    - acl
+    - mysql-community-server
+    - npm
+    - python3-pip
+    - MySQL-python
+    - cronie
+
+- name: Check if Service Firewalld
+  shell: "if systemctl list-unit-files | grep -q firewalld;   then echo true;   else echo false; fi;"
+  register: service_exists
+
+- name: Stop Firewalld
+  service:
+   name: firewalld
+   state: stopped
+   enabled: no
+  when: service_exists == "true"
+   
+
+- name: install php dependencies
+  yum:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+  loop:
+    - php
+    - php-curl
+    - php-cli
+    - php-intl
+    - php-iconv
+    - php-fpm
+    - php-curl
+    - php-gd
+    - php-mysql
+    - php-mysqli
+    - php-opcache
+    - php-json
+    - php-mbstring
+    - php-soap
+    - php-xml
+    - php-zip
+    - php-gmp
+    - php-bcmath
+    - php-memcached
+    - php-xdebug
+    - php-redis
+
+- ansible.builtin.include_tasks: setup-mysql-centos.yml

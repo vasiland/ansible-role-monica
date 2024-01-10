@@ -1,0 +1,4 @@
+group_name: www-data
+nginx_conf: /etc/nginx/sites-enabled/monica.conf
+service_fpm: php8.2-fpm
+fastcgi_p: "unix:/var/run/php/php8.2-fpm.sock"
